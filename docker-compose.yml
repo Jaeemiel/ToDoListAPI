@@ -1,0 +1,29 @@
+# Liste des services du gestionnaire de conteneurs
+services:
+  db_api:
+    image: mysql:8.0
+    container_name: db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_DATABASE: ${DB_URL}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      LANG: C.UTF-8
+    volumes:
+      - todolist_data_api:/var/lib/mysql
+      - ./init-db:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    depends_on:
+      - db_api
+    environment:
+      PMA_HOST: db_api
+    ports:
+      - "8082:80"
+
+volumes:
+  todolist_data_api:
