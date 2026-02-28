@@ -46,6 +46,12 @@ Créer un fichier `.env` à la racine (déjà dans le `.gitignore`) :
 DB_URL=jdbc:mysql://localhost:3306/demoapijava
 DB_USERNAME=demoapijava
 DB_PASSWORD=demoapijava
+JWT_SECRET=VOTRE_CLE_GENEREE_AVEC_OPENSSL
+```
+
+Générer la clé JWT :
+```bash
+openssl rand -base64 64
 ```
 > Sans ce fichier, Spring Boot utilise les valeurs par défaut
 > définies dans `application.properties`.
@@ -70,13 +76,14 @@ Via terminal :
 src/
 └── main/
     ├── java/com/example/demoapi/
-    │   ├── controller/   # Endpoints REST
-    │   ├── entity/       # Entités JPA (Tache, Categorie)
-    │   ├── repository/   # Interfaces Spring Data JPA
-    │   └── service/      # Logique métier
+    │   ├── controller/        # Endpoints REST (Taches, Auth)
+    │   ├── entity/            # Entités JPA (Tache, User)
+    │   ├── repository/        # Interfaces Spring Data JPA
+    │   ├── service/           # Logique metier
+    │   └── security/          # JWT, Filtres, Config Spring Security
     └── resources/
-        ├── schema.sql    # Création des tables
-        ├── data.sql      # Données de test
+        ├── schema.sql         # Creation des tables
+        ├── data.sql           # Données de test
         └── application.properties
 ```
 
@@ -98,13 +105,15 @@ src/
 ## Endpoints disponibles
 > Utiliser postman ou un autre logiciel qui permet de faire du HTTP
 
-| Méthode | URL                  | Description              |
-|---------|----------------------|--------------------------|
-| GET     | /api/taches          | Lister toutes les tâches |
-| GET     | /api/taches/{id}     | Récupérer une tâche      |
-| POST    | /api/taches          | Créer une tâche          |
-| PUT     | /api/taches/{id}     | Modifier une tâche       |
-| DELETE  | /api/taches/{id}     | Supprimer une tâche      |
+| Méthode | URL                | Description                          | ACCES   |
+|---------|--------------------|--------------------------------------|---------|
+| POST    | /api/auth/register | Créer un compte utilisateur          | PUBLIC  |
+| POST    | /api/auth/login    | Se connecter → retourne un token JWT | PUBLIC  |
+| GET     | /api/taches        | Lister toutes les tâches             | PROTEGE |
+| GET     | /api/taches/{id}   | Récupérer une tâche                  | PROTEGE |
+| POST    | /api/taches        | Créer une tâche                      | PROTEGE |
+| PUT     | /api/taches/{id}   | Modifier une tâche                   | PROTEGE |
+| DELETE  | /api/taches/{id}   | Supprimer une tâche                  | PROTEGE |
 
 
 ## Problèmes fréquents

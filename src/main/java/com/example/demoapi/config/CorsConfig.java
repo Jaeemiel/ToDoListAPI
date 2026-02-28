@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173", "tauri://localhost", "http://tauri.localhost") // on autorise le port Vite par défaut
+                .allowedOrigins("http://localhost:5173", "tauri://localhost", "http://tauri.localhost") // on autorise les domaines pour le front web et desktop par défaut
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(false)
