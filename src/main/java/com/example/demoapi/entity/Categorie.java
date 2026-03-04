@@ -13,6 +13,9 @@ public class Categorie {
     @Column(nullable = false)
     private String nom;
 
+    @Column(nullable = true)
+    private String entreprise;
+
     public Long getId() {
         return id;
     }
