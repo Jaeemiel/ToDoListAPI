@@ -20,13 +20,31 @@ Permet de manipuler et de mettre en pratique du dev dans un environement JAVA.
 
 ## Lancer le projet
 
-### 1. Cloner le repo
+### 1. Faire un fork du repo puis le cloner
 
 `git clone https://github.com/MathieuTWR/ToDoListAPI.git`
 
 `cd ToDoListAPI`
 
-### 2. Lancement des services docker (mysql + pma)
+### 2. Configurer les variables d'environnement
+
+Générer la clé JWT :
+```bash
+openssl rand -base64 64
+```
+> Sans ce fichier, Spring Boot utilise les valeurs par défaut
+> définies dans `application.properties`.
+
+Créer un fichier `.env` à la racine (déjà dans le `.gitignore`) :
+
+```
+DB_URL=jdbc:mysql://localhost:3306/demoapijava
+DB_USERNAME=demoapijava
+DB_PASSWORD=demoapijava
+JWT_SECRET=VOTRE_CLE_GENEREE_AVEC_OPENSSL
+```
+
+### 3. Lancement des services docker (mysql + pma)
 
 `docker compose up -d db_api phpmyadmin`
 
@@ -38,31 +56,22 @@ Les services exposés :
 - MySQL : localhost:3306
 - phpMyAdmin : http://localhost:8082
 
-### 3. Configurer les variables d'environnement
-
-Créer un fichier `.env` à la racine (déjà dans le `.gitignore`) :
-
-```
-DB_URL=jdbc:mysql://localhost:3306/demoapijava
-DB_USERNAME=demoapijava
-DB_PASSWORD=demoapijava
-JWT_SECRET=VOTRE_CLE_GENEREE_AVEC_OPENSSL
-```
-
-Générer la clé JWT :
-```bash
-openssl rand -base64 64
-```
-> Sans ce fichier, Spring Boot utilise les valeurs par défaut
-> définies dans `application.properties`.
-
 ### 4. RUN de l'API
 
 Via IntelliJ : bouton Run (play) sur `DemoApiApplication.java`
-> Vous devez avoir configurer le run dans votre IDE pour run le projet
+> Vous devez avoir configurer le run dans votre IDE pour run le projet :
+    Ajout des variables d'environnement : chemin jusqu'au env /ToDoListAPI/.env
+    Main Classe : com.example.demoapi.DemoApiApplication
+    Avec une configuration sur springboot
+
+> Faire un Ctrl+A puis Ctrl+X dans le fichier application.properties dans le dossier ressources
 
 Via terminal :
+`./mvnw install -DskipTests` 
+
 `./mvnw spring-boot:run -DskipTests` (attention ici le .env n'est pas charger)
+
+> Remetter les infos dans application.properties puis lancer le run de l'IDE
 
  * API disponible ici : http://localhost:8080
 
